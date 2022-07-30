@@ -1,3 +1,5 @@
+#AULA 4 - PERSONALIZANDO MAPAS
+
 ##INSTALANDO E CARREGANDO PACOTES COM O PACMAN
 library(pacman)
 p_load(
@@ -34,11 +36,6 @@ casos_uf$TX_INCIDENCIA = round(casos_uf$CASOS/casos_uf$pop*100000, 2)
 
 ##IMPORTANDO SHAPEFILE DO BRASIL 
 br_shp = read_sf('dados/BR_UF_2021/BR_UF_2021.shp')
-plot(br_shp) #plotando atributos básicos do shapefile
-glimpse(br_shp) #visualizando a tabela de atributos
-
-ggplot() + #plotando o mapa com os dados do Brasil
-  geom_sf(data= br_shp)
 
 ##UNINDO DADOS DO MAPA DO BRASIL COM OS DADOS DE INCIDÊNCIA
 df_inc = data.frame(
