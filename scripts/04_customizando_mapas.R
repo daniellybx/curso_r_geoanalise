@@ -54,3 +54,162 @@ ggplot() +
   geom_sf(data = br_shp_inc, aes(fill = TX_INCIDENCIA))
 
 #CUSTOMIZANDO O MAPA
+
+##GERANDO QUEBRAS DE ACORDO COM OS QUARTIS 
+quartis = quantile(br_shp_inc$TX_INCIDENCIA, prob=c(0.25, 0.5, 0.75))
+br_shp_inc$quartis = factor(findInterval(br_shp_inc$TX_INCIDENCIA, quartis))
+levels(br_shp_inc$quartis) <- c("0 - 246", "247-304", "305-322", ">322")
+
+##PLOTANDO O MAPA 
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+               aes(fill = quartis))
+  
+##MODIFICANDO PALETA DE CORES MANUALMENTE
+pallete = c("#dff6ff", "#5d8bf4", "#2d31fa", "#051367") #tons graduados de azul
+
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis))+
+  scale_fill_manual(values = pallete)
+
+##MODIFICANDO PALETA COM O PACOTE "RColorBrewer"
+display.brewer.all() #plotando paletas de cores
+
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis))+
+  scale_fill_brewer(palette="BuPu")
+
+##MOFICICANDO ESPESSURA DAS BORDAS
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis), color = "white", size = 1)+ #incluindo cor branca na borda e tamanho igual a 1
+  scale_fill_brewer(palette="BuPu")
+
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis), color = "gray67", size = 1)+ #incluindo cor cinza na borda e tamanho igual a 1
+  scale_fill_brewer(palette="BuPu")
+
+##DESTACANDO UMA ÁREA GEOGRÁFICA
+
+ggplot() + #realizando um filtr de unidades federadas
+  geom_sf(data = br_shp_inc %>% 
+          filter(NM_REGIAO == "Nordeste"), 
+          aes(fill = quartis), #graduando por quartis nacionais
+          color = "gray60",    #incluindo borda cinza
+          alpha = 0.9,         #gerando transparencia
+          size = 1.2)+         #escolhendo tamanho da borda  
+  scale_fill_brewer(palette="BuGn")+
+  guides(fill=guide_legend(title="Taxa de incidência"))+ #mudando título da legenda
+  theme_bw()
+
+##ESCALA
+
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis), 
+          color = "gray67", 
+          size = 1)+ 
+  scale_fill_brewer(palette="PuRd")+
+  guides(fill=guide_legend(title="Taxa de incidência"))+ 
+  theme_bw()+
+  annotation_scale() #adicionando escala
+
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis), 
+          color = "gray67", 
+          size = 1)+ 
+  scale_fill_brewer(palette="PuRd")+
+  guides(fill=guide_legend(title="Taxa de incidência"))+ 
+  theme_bw()+
+  annotation_scale(pad_x = unit(7, "cm"), #mudando escala de lugar
+                   pad_y = unit(0.2, "cm"))
+
+##ROSA DOS VENTOS
+
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis), 
+          color = "gray67", 
+          size = 1)+ 
+  scale_fill_brewer(palette="Greens")+
+  guides(fill=guide_legend(title="Taxa de incidência"))+ 
+  theme_bw()+
+  annotation_scale(pad_x = unit(7.4, "cm"), 
+                   pad_y = unit(0.3, "cm"))+
+  annotation_north_arrow(style=north_arrow_nautical()) #adicionando rosa dos ventos
+
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis), 
+          color = "gray67", 
+          size = 1)+ 
+  scale_fill_brewer(palette="Greens")+
+  guides(fill=guide_legend(title="Taxa de incidência"))+ 
+  theme_bw()+
+  annotation_scale()+
+  annotation_north_arrow(style=north_arrow_orienteering(), #modificando rosa dos ventos para seta de norte
+                         pad_x = unit(14, "cm"),           #mudando posição da seta
+                         pad_y = unit(13, "cm")) 
+
+##REMOVENDO LATITUDE E LONGITUDE DAS MARGENS
+
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis), 
+          color = "gray67", 
+          size = 1)+ 
+  scale_fill_brewer(palette="Blues")+
+  guides(fill=guide_legend(title="Taxa de incidência"))+ 
+  theme(panel.background = element_blank(), #mudando o tema para excluir a latitude e longitude
+        axis.ticks = element_blank(),       #excluindo dados dos eixos
+        axis.text = element_blank())+       #excluindo títulos dos eixos
+  annotation_scale()+
+  annotation_north_arrow(style=north_arrow_orienteering(), 
+                         pad_x = unit(14, "cm"),           
+                         pad_y = unit(13.5, "cm")) 
+
+##TÍTULO
+
+ggplot()+
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis), 
+          color = "gray67", 
+          size = 1)+ 
+  scale_fill_brewer(palette="Purples")+
+  guides(fill=guide_legend(title="Taxa de incidência"))+ 
+  theme(panel.background = element_blank(), 
+        axis.ticks = element_blank(),       
+        axis.text = element_blank())+       
+  annotation_scale()+
+  annotation_north_arrow(style=north_arrow_orienteering(), 
+                         pad_x = unit(14, "cm"),           
+                         pad_y = unit(13.5, "cm"))+
+  ggtitle("Taxa de incidência por Covid-19 no Brasil, 2020") #Incluindo título
+
+##EXPORTANDO O MAPA
+
+mapa_final = ggplot()+ #salvando o mapa em um objeto
+  geom_sf(data = br_shp_inc, 
+          aes(fill = quartis), 
+          color = "gray67", 
+          size = 1)+ 
+  scale_fill_brewer(palette="Purples")+
+  guides(fill=guide_legend(title="Taxa de incidência"))+ 
+  theme(panel.background = element_blank(), 
+        axis.ticks = element_blank(),       
+        axis.text = element_blank(),
+        plot.title = element_text(size = 20, face = "bold"))+ #aumentando o título e colocando em negrito   
+  annotation_scale()+
+  annotation_north_arrow(style=north_arrow_orienteering(), 
+                         pad_x = unit(21, "cm"),              #alterando local para se ajustar ao tamanho do título 
+                         pad_y = unit(21, "cm"))+
+  ggtitle("Taxa de incidência por Covid-19 no Brasil, 2020")
+
+mapa_final
+
+ggsave(filename = "mapa_tx_inc_covid.png", #exportando o último mapa plotado
+       height = 10, width = 15, dpi = 320)
