@@ -16,6 +16,7 @@ Ao final do curso o aluno estará apto a:
 - RStudio
 
 ## Estude com esse repositório
-´´´
+
+´´´´
 git clone https://github.com/daniellybx/curso_r_geoanalise.git
-´´´
+´´´´
