@@ -55,7 +55,7 @@ ggplot() +
 ##GERANDO QUEBRAS DE ACORDO COM OS QUARTIS 
 quartis = quantile(br_shp_inc$TX_INCIDENCIA, prob=c(0.25, 0.5, 0.75))
 br_shp_inc$quartis = factor(findInterval(br_shp_inc$TX_INCIDENCIA, quartis))
-levels(br_shp_inc$quartis) <- c("0 - 246", "247-304", "305-322", ">322")
+levels(br_shp_inc$quartis) <- c("0 - 246", "247-304", "305-322", ">322") #usando os valores dos quartis para gerar a variável
 
 ##PLOTANDO O MAPA 
 ggplot()+
@@ -91,7 +91,7 @@ ggplot()+
 
 ##DESTACANDO UMA ÁREA GEOGRÁFICA
 
-ggplot() + #realizando um filtr de unidades federadas
+ggplot() + #realizando um filter de unidades federadas
   geom_sf(data = br_shp_inc %>% 
           filter(NM_REGIAO == "Nordeste"), 
           aes(fill = quartis), #graduando por quartis nacionais
@@ -149,8 +149,8 @@ ggplot()+
   theme_bw()+
   annotation_scale()+
   annotation_north_arrow(style=north_arrow_orienteering(), #modificando rosa dos ventos para seta de norte
-                         pad_x = unit(14, "cm"),           #mudando posição da seta
-                         pad_y = unit(13, "cm")) 
+                         pad_x = unit(9, "cm"),            #mudando posição da seta
+                         pad_y = unit(8, "cm")) 
 
 ##REMOVENDO LATITUDE E LONGITUDE DAS MARGENS
 
@@ -161,13 +161,13 @@ ggplot()+
           size = 1)+ 
   scale_fill_brewer(palette="Blues")+
   guides(fill=guide_legend(title="Taxa de incidência"))+ 
-  theme(panel.background = element_blank(), #mudando o tema para excluir a latitude e longitude
+  theme(panel.background = element_blank(), #mudando o tema para excluir a grade de fundo
         axis.ticks = element_blank(),       #excluindo dados dos eixos
         axis.text = element_blank())+       #excluindo títulos dos eixos
   annotation_scale()+
   annotation_north_arrow(style=north_arrow_orienteering(), 
-                         pad_x = unit(14, "cm"),           
-                         pad_y = unit(13.5, "cm")) 
+                         pad_x = unit(9, "cm"),           
+                         pad_y = unit(8, "cm")) 
 
 ##TÍTULO
 
@@ -183,8 +183,8 @@ ggplot()+
         axis.text = element_blank())+       
   annotation_scale()+
   annotation_north_arrow(style=north_arrow_orienteering(), 
-                         pad_x = unit(14, "cm"),           
-                         pad_y = unit(13.5, "cm"))+
+                         pad_x = unit(8, "cm"),           
+                         pad_y = unit(0.5, "cm"))+
   ggtitle("Taxa de incidência por Covid-19 no Brasil, 2020") #Incluindo título
 
 ##EXPORTANDO O MAPA

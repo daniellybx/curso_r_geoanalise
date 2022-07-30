@@ -58,7 +58,7 @@ ggplot() + #personalizando o mapa com os dados do Brasil
   theme(panel.background = element_rect(fill = "lightblue"),
         panel.grid.major = element_line(color = "black", size = 0.2))
 
-ggplot() + #realizando um filtr de unidades federadas
+ggplot() + #realizando um filter de unidades federadas
   geom_sf(data = br_shp %>% 
           filter(NM_UF == "Santa Catarina" | SIGLA == "RS"), 
           fill = "#002776", #azul da bandeira do Brasil em cor hexadecimal
